@@ -1,0 +1,32 @@
+update_delay: 2
+update_interval: 5
+retry_count: 32
+retry_timeout: 5
+rules:
+  - type: mb
+    interval: 16
+    color_min: [0, 0, 10]
+    color_max: [150, 0, 0]
+    source: cpu
+    curve: 0.75
+    mode: default
+    led_mode: static
+    smooth: 8
+  - type: ram
+    interval: 29
+    source: ram
+    color_min: [0, 0, 0]
+    color_max: [255, 0, 0]
+    curve: 1
+    mode: led_step
+    led_mode: direct
+    smooth: 0
+  - type: gpu
+    interval: 31
+    color_min: [0, 0, 255]
+    color_max: [255, 0, 0]
+    source: cpu
+    curve: 1.5
+    mode: default
+    led_mode: direct
+    smooth: 8
