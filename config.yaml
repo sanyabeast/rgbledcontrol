@@ -8,10 +8,10 @@ rules:
     color_min: [0, 0, 10]
     color_max: [150, 0, 0]
     source: cpu
-    curve: 0.75
+    curve: 1
     mode: default
     led_mode: static
-    smooth: 8
+    smooth: 4
   - type: ram
     interval: 29
     source: ram
@@ -26,7 +26,7 @@ rules:
     color_min: [0, 0, 255]
     color_max: [255, 0, 0]
     source: cpu
-    curve: 1.5
+    curve: 2
     mode: default
     led_mode: direct
-    smooth: 8
+    smooth: 16
