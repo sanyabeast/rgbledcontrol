@@ -9,6 +9,7 @@ from tools import apply_color_brightness, clamp, ease_value, get_cpu_usage, get_
 
 client = None
 
+
 def init_ledcontrol(rules, config):
     global client
 
@@ -20,18 +21,20 @@ def init_ledcontrol(rules, config):
             break
         except socket.timeout:
             time.sleep(config["retry_timeout"])
-            print(f'failed to connect: retry in {config["retry_timeout"]}s; ({x}/{config["retry_count"]})')
+            print(
+                f'[ledcontrol] (!): failed to connect: retry in {config["retry_timeout"]}s; ({x}/{config["retry_count"]})')
             x += 1
 
     if (client == 0):
-        print('failed to connect')
+        print('[ledcontrol] (i): connection to OpenRGB server failed. now exiting.')
         sys.exit()
         return 0
 
-    print('connected')
+    print('[ledcontrol] (i): Connected to OpenRGB Server')
     client.clear()
 
     for rule in rules:
+        print(f'[ledcontrol] (i): initializing rule for "{rule.type}"')
         if rule.type == 'mb':
             devices = client.get_devices_by_type(DeviceType.MOTHERBOARD)
         elif rule.type == 'ram':
@@ -39,8 +42,10 @@ def init_ledcontrol(rules, config):
         elif rule.type == 'gpu':
             devices = client.get_devices_by_type(DeviceType.GPU)
 
-    for dv in devices:
-        dv.set_mode(rule.led_mode)
+        for dv in devices:
+            print(
+                f'[ledcontrol] (i): setting {dv} led mode to "{rule.led_mode}"')
+            dv.set_mode(rule.led_mode)
 
 
 def update_rule(rule):
@@ -76,16 +81,11 @@ def update_rule(rule):
         elif rule.source == 'always_min':
             progress = 0
 
-        # progress = rule.commit_value(progress)    
-        # print(progress)
-
         curved_progress = ease_value(progress, rule.curve)
-        curved_progress = rule.commit_value(curved_progress)    
+        curved_progress = rule.commit_value(curved_progress)
 
         new_color = lerp_color(
             rule.color_min, rule.color_max, curved_progress)
-
-        # print(f"{rule.to_string()}: {'{:2.2f}'.format(progress * 100)}%, curved progress: {'{:2.2f}'.format(curved_progress * 100)}%")
 
         # applying
         if rule.mode == "zone_step":

@@ -2,6 +2,9 @@ update_delay: 2
 update_interval: 5
 retry_count: 32
 retry_timeout: 5
+scripts:
+  stutter: "./scripts/hard_reset.py"
+  preinit: "./scripts/hard_reset.py"
 rules:
   - type: mb
     interval: 16
@@ -10,7 +13,7 @@ rules:
     source: cpu
     curve: 1
     mode: default
-    led_mode: static
+    led_mode: direct
     smooth: 4
   - type: ram
     interval: 29
@@ -26,7 +29,7 @@ rules:
     color_min: [0, 0, 255]
     color_max: [255, 0, 0]
     source: cpu
-    curve: 2
+    curve: 0.5
     mode: default
     led_mode: direct
     smooth: 16
